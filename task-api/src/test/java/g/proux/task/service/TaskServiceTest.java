@@ -1,5 +1,6 @@
 package g.proux.task.service;
 
+import g.proux.task.controller.dto.CreationTaskFormDTO;
 import g.proux.task.controller.dto.TaskDTO;
 import g.proux.task.domain.TaskService;
 import g.proux.task.provider.data.entity.Task;
@@ -53,6 +54,30 @@ public class TaskServiceTest {
         assertEquals(2, result.size());
         assertEquals("Tâche 1", result.get(0).label());
         assertEquals("Tâche 2", result.get(1).label());
+    }
+
+    @Test
+    void testCreateTask() {
+        CreationTaskFormDTO form = new CreationTaskFormDTO("Nouvelle tâche", "Description de la tâche");
+
+        Task taskEntity = new Task(1L, "Nouvelle tâche", "Description de la tâche", false);
+
+        TaskDTO expectedDTO = new TaskDTO(1L, "Nouvelle tâche", "Description de la tâche", false);
+
+        when(taskMapper.creationFormToEntity(form)).thenReturn(taskEntity);
+        when(taskRepository.save(taskEntity)).thenReturn(taskEntity);
+        when(taskMapper.toDTO(taskEntity)).thenReturn(expectedDTO);
+
+        TaskDTO result = taskService.createTask(form);
+
+        verify(taskMapper).creationFormToEntity(form);
+        verify(taskRepository).save(taskEntity);
+        verify(taskMapper).toDTO(taskEntity);
+
+        assertNotNull(result);
+        assertEquals(1L, result.id());
+        assertEquals("Nouvelle tâche", result.label());
+        assertEquals("Description de la tâche", result.description());
     }
 
 }

@@ -1,6 +1,8 @@
 package g.proux.task.domain;
 
+import g.proux.task.controller.dto.CreationTaskFormDTO;
 import g.proux.task.controller.dto.TaskDTO;
+import g.proux.task.provider.data.entity.Task;
 import g.proux.task.provider.data.repository.TaskRepository;
 import g.proux.task.mapper.TaskMapper;
 import lombok.RequiredArgsConstructor;
@@ -22,4 +24,9 @@ public class TaskService {
         return taskRepository.findAll().stream().map(taskMapper::toDTO).toList();
     }
 
+    public TaskDTO createTask(CreationTaskFormDTO form) {
+        Task task = taskMapper.creationFormToEntity(form);
+        task = taskRepository.save(task);
+        return taskMapper.toDTO(task);
+    }
 }
