@@ -22,9 +22,9 @@ public class TaskController {
     private final TaskService taskService;
 
     @GetMapping("/api/v1/tasks")
-    @Operation(description = "Get all tasks from database.")
-    public List<TaskDTO> getTasks() {
-        return taskService.getTasks();
+    @Operation(description = "Get tasks with optional parameter 'completed'. By default 'completed' is null so we get all tasks from database.")
+    public List<TaskDTO> getTasks(@RequestParam(value = "completed", required = false) Boolean completed) {
+        return taskService.getTasks(completed);
     }
 
     @PostMapping("/api/v1/tasks")
