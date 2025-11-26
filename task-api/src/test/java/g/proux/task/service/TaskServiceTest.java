@@ -2,10 +2,13 @@ package g.proux.task.service;
 
 import g.proux.task.controller.dto.CreationTaskFormDTO;
 import g.proux.task.controller.dto.TaskDTO;
+import g.proux.task.controller.exception.NotFoundException;
 import g.proux.task.domain.TaskService;
+import g.proux.task.domain.exception.TaskNotFoundException;
 import g.proux.task.mapper.TaskMapper;
 import g.proux.task.provider.data.entity.Task;
 import g.proux.task.provider.data.repository.TaskRepository;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,9 +19,9 @@ import org.springframework.data.jpa.domain.Specification;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -131,6 +134,38 @@ public class TaskServiceTest {
         assertEquals(1L, result.id());
         assertEquals("Nouvelle tâche", result.label());
         assertEquals("Description de la tâche", result.description());
+    }
+
+    @SneakyThrows
+    @Test
+    void getOneTask_nominalCase() {
+        Long id = 1L;
+        Task task = new Task(id, "Label", "Description", false);
+        TaskDTO dto = new TaskDTO(id, "Label", "Description", false);
+
+        when(taskRepository.findById(id)).thenReturn(Optional.of(task));
+        when(taskMapper.toDTO(task)).thenReturn(dto);
+
+        TaskDTO result = taskService.getOneTask(id);
+
+        verify(taskRepository).findById(id);
+        verify(taskMapper).toDTO(task);
+
+        assertEquals(dto, result);
+    }
+
+    @SneakyThrows
+    @Test
+    void getOneTask_errorCase_whenTaskNotFound() {
+        Long id = 1L;
+
+        when(taskRepository.findById(id)).thenReturn(Optional.empty());
+
+        NotFoundException ex = assertThrowsExactly(NotFoundException.class, () -> taskService.getOneTask(id));
+
+        verify(taskRepository).findById(id);
+
+        assertEquals(ex.getMessage(), String.format("No task was found with %s ID", id));
     }
 
 }

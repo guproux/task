@@ -2,6 +2,8 @@ package g.proux.task.domain;
 
 import g.proux.task.controller.dto.CreationTaskFormDTO;
 import g.proux.task.controller.dto.TaskDTO;
+import g.proux.task.controller.exception.NotFoundException;
+import g.proux.task.domain.exception.TaskNotFoundException;
 import g.proux.task.mapper.TaskMapper;
 import g.proux.task.provider.data.entity.Task;
 import g.proux.task.provider.data.repository.TaskRepository;
@@ -36,5 +38,21 @@ public class TaskService {
         Task task = taskMapper.creationFormToEntity(form);
         task = taskRepository.save(task);
         return taskMapper.toDTO(task);
+    }
+
+    public TaskDTO getOneTask(Long taskID) {
+        try {
+            return taskMapper.toDTO(getTaskById(taskID));
+        } catch (TaskNotFoundException ex) {
+            throw new NotFoundException(ex.getMessage(), ex);
+        }
+    }
+
+    private Task getTaskById(Long taskID) throws TaskNotFoundException {
+        return taskRepository.findById(taskID).orElseThrow(() -> {
+            String errMsg = String.format("No task was found with %s ID", taskID);
+            log.error(errMsg);
+            return new TaskNotFoundException(errMsg, "GET_TASK_NOT_FOUND");
+        });
     }
 }
