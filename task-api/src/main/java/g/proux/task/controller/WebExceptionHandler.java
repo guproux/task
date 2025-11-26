@@ -12,7 +12,7 @@ public class WebExceptionHandler {
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NotFoundException.class)
-    ResponseStatusException handleNotFound(RuntimeException ex) {
+    ResponseStatusException handleNotFound(NotFoundException ex) {
         return new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
     }
 

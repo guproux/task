@@ -2,9 +2,9 @@ package g.proux.task.service;
 
 import g.proux.task.controller.dto.CreationTaskFormDTO;
 import g.proux.task.controller.dto.TaskDTO;
+import g.proux.task.controller.dto.UpdateTaskFormDTO;
 import g.proux.task.controller.exception.NotFoundException;
 import g.proux.task.domain.TaskService;
-import g.proux.task.domain.exception.TaskNotFoundException;
 import g.proux.task.mapper.TaskMapper;
 import g.proux.task.provider.data.entity.Task;
 import g.proux.task.provider.data.repository.TaskRepository;
@@ -120,13 +120,13 @@ public class TaskServiceTest {
 
         TaskDTO expectedDTO = new TaskDTO(1L, "Nouvelle tâche", "Description de la tâche", false);
 
-        when(taskMapper.creationFormToEntity(form)).thenReturn(taskEntity);
+        when(taskMapper.toTaskToCreate(form)).thenReturn(taskEntity);
         when(taskRepository.save(taskEntity)).thenReturn(taskEntity);
         when(taskMapper.toDTO(taskEntity)).thenReturn(expectedDTO);
 
         TaskDTO result = taskService.createTask(form);
 
-        verify(taskMapper).creationFormToEntity(form);
+        verify(taskMapper).toTaskToCreate(form);
         verify(taskRepository).save(taskEntity);
         verify(taskMapper).toDTO(taskEntity);
 
@@ -162,6 +162,49 @@ public class TaskServiceTest {
         when(taskRepository.findById(id)).thenReturn(Optional.empty());
 
         NotFoundException ex = assertThrowsExactly(NotFoundException.class, () -> taskService.getOneTask(id));
+
+        verify(taskRepository).findById(id);
+
+        assertEquals(ex.getMessage(), String.format("No task was found with %s ID", id));
+    }
+
+    @SneakyThrows
+    @Test
+    void updateTaskStatus_nominalCase() {
+        Long id = 1L;
+        UpdateTaskFormDTO form = new UpdateTaskFormDTO(true);
+
+        Task existingTask = new Task(id, "Label", "Description", false);
+        Task updatedTask = new Task(id, "Label", "Description", true);
+        TaskDTO dto = new TaskDTO(id, "Label", "Description", true);
+
+        when(taskRepository.findById(id)).thenReturn(Optional.of(existingTask));
+        when(taskMapper.toUpdatedTask(existingTask, form)).thenReturn(updatedTask);
+        when(taskRepository.save(updatedTask)).thenReturn(updatedTask);
+        when(taskMapper.toDTO(updatedTask)).thenReturn(dto);
+
+        TaskDTO result = taskService.updateTaskStatus(id, form);
+
+        verify(taskRepository).findById(id);
+        verify(taskMapper).toUpdatedTask(existingTask, form);
+        verify(taskRepository).save(updatedTask);
+        verify(taskMapper).toDTO(updatedTask);
+
+        assertEquals(dto, result);
+    }
+
+    @SneakyThrows
+    @Test
+    void updateTaskStatus_errorCase_whenTaskNotFound() {
+        Long id = 1L;
+        UpdateTaskFormDTO form = new UpdateTaskFormDTO(true);
+
+        when(taskRepository.findById(id)).thenReturn(Optional.empty());
+
+        NotFoundException ex = assertThrowsExactly(
+                NotFoundException.class,
+                () -> taskService.updateTaskStatus(id, form)
+        );
 
         verify(taskRepository).findById(id);
 

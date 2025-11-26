@@ -2,6 +2,7 @@ package g.proux.task.controller;
 
 import g.proux.task.controller.dto.CreationTaskFormDTO;
 import g.proux.task.controller.dto.TaskDTO;
+import g.proux.task.controller.dto.UpdateTaskFormDTO;
 import g.proux.task.domain.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,7 +32,7 @@ public class TaskController {
     @PostMapping("/api/v1/tasks")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(description = "Create a new task.")
-    public TaskDTO createTask(@RequestBody @Valid CreationTaskFormDTO form) {
+    public TaskDTO createTask(@Valid @RequestBody CreationTaskFormDTO form) {
         return taskService.createTask(form);
     }
 
@@ -39,6 +40,12 @@ public class TaskController {
     @Operation(description = "Get one task by its ID.")
     public TaskDTO getOneTask(@PathParam("taskID") Long taskID) {
         return taskService.getOneTask(taskID);
+    }
+
+    @PatchMapping("/api/v1/tasks/{taskID}")
+    @Operation(description = "Update a task status.")
+    public TaskDTO updateTaskStatus(@PathParam("taskID") Long taskID, @Valid @RequestBody UpdateTaskFormDTO form) {
+        return taskService.updateTaskStatus(taskID, form);
     }
 
 }
