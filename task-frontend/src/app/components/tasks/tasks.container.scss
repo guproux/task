@@ -1,4 +1,15 @@
-.error-card {
-  border: 2px red solid;
-  margin-top: 10px;
+.tasks-container {
+  margin-top: 20px;
+
+  &__loader {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__error-card {
+    border: 2px red solid;
+    margin-top: 10px;
+  }
 }

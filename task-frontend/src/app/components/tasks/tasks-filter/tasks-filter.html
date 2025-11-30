@@ -1,0 +1,14 @@
+<div class="tasks-filter">
+  <mat-checkbox
+    [checked]="completed"
+    (change)="completedCheck($event.checked)"
+  >
+    Completed
+  </mat-checkbox>
+  <button
+    matButton
+    (click)="resetFilter()"
+  >
+    Reset
+  </button>
+</div>
