@@ -7,7 +7,6 @@ import g.proux.task.domain.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,13 +37,13 @@ public class TaskController {
 
     @GetMapping("/api/v1/tasks/{taskID}")
     @Operation(description = "Get one task by its ID.")
-    public TaskDTO getOneTask(@PathParam("taskID") Long taskID) {
+    public TaskDTO getOneTask(@PathVariable("taskID") Long taskID) {
         return taskService.getOneTask(taskID);
     }
 
     @PatchMapping("/api/v1/tasks/{taskID}")
     @Operation(description = "Update a task status.")
-    public TaskDTO updateTaskStatus(@PathParam("taskID") Long taskID, @Valid @RequestBody UpdateTaskFormDTO form) {
+    public TaskDTO updateTaskStatus(@PathVariable("taskID") Long taskID, @Valid @RequestBody UpdateTaskFormDTO form) {
         return taskService.updateTaskStatus(taskID, form);
     }
 
