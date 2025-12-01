@@ -7,10 +7,10 @@ import {MatTableModule} from '@angular/material/table';
   imports: [
     MatTableModule
   ],
-  templateUrl: './tasks-list.html',
-  styleUrl: './tasks-list.scss',
+  templateUrl: './tasks-list.component.html',
+  styleUrl: './tasks-list.component.scss',
 })
-export class TasksList {
+export class TasksListComponent {
 
   @Input() tasks: Task[] = []
 

@@ -1,7 +1,11 @@
 .tasks-filter {
-  width: 100%;
+  width: 250px;
+  padding: 10px;
 
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+
+  border: 1px solid black;
+  border-radius: 10px;
 }

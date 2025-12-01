@@ -8,10 +8,10 @@ import {MatButton} from '@angular/material/button';
     MatCheckbox,
     MatButton
   ],
-  templateUrl: './tasks-filter.html',
-  styleUrl: './tasks-filter.scss',
+  templateUrl: './tasks-filter.component.html',
+  styleUrl: './tasks-filter.component.scss',
 })
-export class TasksFilter {
+export class TasksFilterComponent {
 
   @Output() onModelChange: EventEmitter<boolean|null> = new EventEmitter()
 

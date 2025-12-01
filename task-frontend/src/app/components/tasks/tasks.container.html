@@ -1,16 +1,22 @@
 <div class="tasks-container">
-  <app-tasks-filter
-    (onModelChange)="updateTasksList($event)"
-  />
+  <div class="tasks-container__actions">
+    <app-tasks-filter
+      (onModelChange)="updateTasksList($event)"
+    />
+    <button
+      matButton="tonal"
+      (click)="createNewTask()"
+    >
+      New task
+    </button>
+  </div>
 
   @if (loading | async) {
     <div class="tasks-container__loader">
       <mat-spinner />
     </div>
-  } @else if (!!error) {
-    <mat-card class="tasks-container__error-card" appearance="outlined">
-      <mat-card-content>{{ error }}</mat-card-content>
-    </mat-card>
+  } @else if (error | async) {
+    <app-error-card class="task-container__error-card" [error]="error.getValue()" />
   } @else {
     <app-tasks-list
       [tasks]="tasks"

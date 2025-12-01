@@ -1,5 +1,13 @@
 .tasks-container {
   margin-top: 20px;
+  width: 500px;
+
+  &__actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
 
   &__loader {
     display: flex;
@@ -9,7 +17,6 @@
   }
 
   &__error-card {
-    border: 2px red solid;
-    margin-top: 10px;
+    margin-bottom: 10px;
   }
 }

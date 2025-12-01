@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TasksFilter } from './tasks-filter';
+import { ErrorCardComponent } from './error-card.component';
 
-describe('TasksFilter', () => {
-  let component: TasksFilter;
-  let fixture: ComponentFixture<TasksFilter>;
+describe('ErrorCardComponent', () => {
+  let component: ErrorCardComponent;
+  let fixture: ComponentFixture<ErrorCardComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TasksFilter]
+      imports: [ErrorCardComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(TasksFilter);
+    fixture = TestBed.createComponent(ErrorCardComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

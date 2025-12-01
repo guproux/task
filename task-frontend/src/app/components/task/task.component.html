@@ -1,0 +1,26 @@
+<div class="task-actions">
+  <button
+    matIconButton
+    (click)="back()"
+  >
+    <mat-icon>arrow_left_alt</mat-icon>
+  </button>
+</div>
+
+@if (error | async) {
+  <app-error-card class="task-error-card" [error]="error.getValue()" />
+}
+
+<form class="task-form" [formGroup]="taskForm" (ngSubmit)="submit()">
+  <div class="task-form__input">
+    <label for="label">Label: </label>
+    <input type="text" id="label" formControlName="label" required>
+  </div>
+
+  <div class="task-form__input">
+    <label for="description">Description: </label>
+    <input type="text" id="description" formControlName="description" required>
+  </div>
+
+  <button matButton="tonal" type="submit">Create</button>
+</form>

@@ -1,0 +1,22 @@
+.task-actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.task-error-card {
+  margin-bottom: 10px;
+}
+
+.task-form {
+  display: flex;
+  flex-direction: column;
+
+  &__input {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    margin-bottom: 10px;
+  }
+}
