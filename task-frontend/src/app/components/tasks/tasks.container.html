@@ -3,11 +3,11 @@
     (onModelChange)="updateTasksList($event)"
   />
 
-  @if (loading) {
+  @if (loading | async) {
     <div class="tasks-container__loader">
       <mat-spinner />
     </div>
-  } @else if (error !== null) {
+  } @else if (!!error) {
     <mat-card class="tasks-container__error-card" appearance="outlined">
       <mat-card-content>{{ error }}</mat-card-content>
     </mat-card>

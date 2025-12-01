@@ -15,14 +15,14 @@ export class TasksFilter {
 
   @Output() onModelChange: EventEmitter<boolean|null> = new EventEmitter()
 
-  completed: boolean | null = null
+  completed: boolean = false
 
   completedCheck(checked: boolean) {
     this.onModelChange.emit(checked)
   }
 
   resetFilter() {
-    this.completed = null
+    this.completed = false
     this.onModelChange.emit(null)
   }
 }

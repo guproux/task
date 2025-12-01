@@ -1,22 +1,23 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {Task} from '../../models/task';
 import {TasksService} from '../../services/tasks.service';
-import {catchError, finalize, of} from 'rxjs';
+import {BehaviorSubject, catchError, finalize, of} from 'rxjs';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {MatCard, MatCardContent} from '@angular/material/card';
 import {TasksFilter} from './tasks-filter/tasks-filter';
 import {TasksList} from './tasks-list/tasks-list';
+import {AsyncPipe} from '@angular/common';
 
 @Component({
   selector: 'app-tasks.container',
-  imports: [MatProgressSpinner, MatCard, MatCardContent, TasksFilter, TasksList],
+  imports: [MatProgressSpinner, MatCard, MatCardContent, TasksFilter, TasksList, AsyncPipe],
   templateUrl: './tasks.container.html',
   styleUrl: './tasks.container.scss',
 })
 export class TasksContainer implements OnInit {
 
   tasks: Task[] = []
-  loading: boolean = false
+  loading: BehaviorSubject<boolean> = new BehaviorSubject(false)
   error: string | null = null
 
   private tasksService: TasksService = inject(TasksService)
@@ -32,7 +33,7 @@ export class TasksContainer implements OnInit {
   }
 
   private getTasks(completed: boolean | null) {
-    this.loading = true
+    this.loading.next(true)
     this.error = null
     return this.tasksService.findTasks(completed)
       .pipe(
@@ -41,7 +42,7 @@ export class TasksContainer implements OnInit {
           return of([])
         }),
         finalize(() => {
-          this.loading = false
+          this.loading.next(false)
         })
       )
   }
