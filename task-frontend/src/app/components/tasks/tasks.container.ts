@@ -40,7 +40,7 @@ export class TasksContainer implements OnInit {
     return this.tasksService.findTasks(completed)
       .pipe(
         catchError((err) => {
-          this.error.next('Error during tasks search.')
+          this.error.next('Error when tasks search.')
           return of([])
         }),
         finalize(() => {

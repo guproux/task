@@ -22,5 +22,7 @@
     <input type="text" id="description" formControlName="description" required>
   </div>
 
-  <button matButton="tonal" type="submit">Create</button>
+  @if (creationMode | async) {
+    <button matButton="tonal" type="submit">Create</button>
+  }
 </form>

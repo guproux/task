@@ -26,4 +26,8 @@ export class TasksService {
   public createTask(task: Task): Observable<Task> {
     return this.http.post<Task>(this.tasksApiUrl, task)
   }
+
+  public findTask(id: number): Observable<Task> {
+    return this.http.get<Task>(this.tasksApiUrl + '/' + id)
+  }
 }

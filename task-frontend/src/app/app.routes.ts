@@ -1,6 +1,6 @@
 import {Routes} from '@angular/router';
 import {TasksContainer} from './components/tasks/tasks.container';
-import {TaskComponent} from './components/task/task.component';
+import TaskComponent from './components/task/task.component';
 
 export const routes: Routes = [
   {
@@ -14,6 +14,10 @@ export const routes: Routes = [
   },
   {
     path: 'task',
+    component: TaskComponent
+  },
+  {
+    path: 'task/:id',
     component: TaskComponent
   }
 ];
