@@ -12,7 +12,9 @@
 
   <ng-container matColumnDef="completed">
     <th mat-header-cell *matHeaderCellDef> Completed </th>
-    <td mat-cell *matCellDef="let element"> {{element.completed}} </td>
+    <td mat-cell *matCellDef="let element">
+      <mat-checkbox [checked]="element.completed" (change)="updateTask(element.id, $event.checked)" />
+    </td>
   </ng-container>
 
   <ng-container matColumnDef="actions">

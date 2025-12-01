@@ -30,4 +30,8 @@ export class TasksService {
   public findTask(id: number): Observable<Task> {
     return this.http.get<Task>(this.tasksApiUrl + '/' + id)
   }
+
+  public completeTask(id: number, task: Task): Observable<Task> {
+    return this.http.patch<Task>(this.tasksApiUrl + '/' + id, task)
+  }
 }

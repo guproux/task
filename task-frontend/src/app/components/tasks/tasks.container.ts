@@ -9,6 +9,7 @@ import {AsyncPipe} from '@angular/common';
 import {MatButton} from '@angular/material/button';
 import {Router} from '@angular/router';
 import {ErrorCardComponent} from '../error-card/error-card.component';
+import {TaskUpdateForm} from '../../models/task-update-form';
 
 @Component({
   selector: 'app-tasks.container',
@@ -55,5 +56,25 @@ export class TasksContainer implements OnInit {
 
   protected createNewTask() {
     this.router.navigate(['/task'])
+  }
+
+  protected updateTask(form: TaskUpdateForm) {
+    this.completeTask(form).pipe(first()).subscribe(task => {
+      this.refreshData(null)
+    })
+  }
+
+  private completeTask(form: TaskUpdateForm) {
+    this.loading.next(true)
+    return this.tasksService.completeTask(form.id, {completed: form.completed} as Task)
+      .pipe(
+        catchError((err) => {
+          this.error.next('Error when task update.')
+          return of()
+        }),
+        finalize(() => {
+          this.loading.next(false)
+        })
+      )
   }
 }
