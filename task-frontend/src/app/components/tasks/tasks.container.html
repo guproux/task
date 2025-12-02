@@ -11,12 +11,12 @@
     </button>
   </div>
 
-  @if (loading | async) {
+  @if (loading()) {
     <div class="tasks-container__loader">
       <mat-spinner />
     </div>
-  } @else if (error | async) {
-    <app-error-card class="task-container__error-card" [error]="error.getValue()" />
+  } @else if (!!error()) {
+    <app-error-card class="task-container__error-card" [error]="error()" />
   } @else {
     <app-tasks-list
       [tasks]="tasks"

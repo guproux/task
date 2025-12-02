@@ -1,11 +1,10 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnInit, signal} from '@angular/core';
 import {Task} from '../../models/task';
 import {TasksService} from '../../services/tasks.service';
-import {BehaviorSubject, catchError, finalize, first, of} from 'rxjs';
+import {catchError, finalize, first, of} from 'rxjs';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {TasksFilterComponent} from './tasks-filter/tasks-filter.component';
 import {TasksListComponent} from './tasks-list/tasks-list.component';
-import {AsyncPipe} from '@angular/common';
 import {MatButton} from '@angular/material/button';
 import {Router} from '@angular/router';
 import {ErrorCardComponent} from '../error-card/error-card.component';
@@ -13,15 +12,15 @@ import {TaskUpdateForm} from '../../models/task-update-form';
 
 @Component({
   selector: 'app-tasks.container',
-  imports: [MatProgressSpinner, TasksFilterComponent, TasksListComponent, AsyncPipe, MatButton, ErrorCardComponent],
+  imports: [MatProgressSpinner, TasksFilterComponent, TasksListComponent, MatButton, ErrorCardComponent],
   templateUrl: './tasks.container.html',
   styleUrl: './tasks.container.scss',
 })
 export class TasksContainer implements OnInit {
 
   protected tasks: Task[] = []
-  protected loading: BehaviorSubject<boolean> = new BehaviorSubject(false)
-  protected error: BehaviorSubject<string> = new BehaviorSubject('')
+  protected loading = signal(false)
+  protected error = signal('')
 
   private router: Router = inject(Router)
   private tasksService: TasksService = inject(TasksService)
@@ -37,15 +36,15 @@ export class TasksContainer implements OnInit {
   }
 
   private getTasks(completed: boolean | null) {
-    this.loading.next(true)
+    this.loading.set(true)
     return this.tasksService.findTasks(completed)
       .pipe(
         catchError((err) => {
-          this.error.next('Error when tasks search.')
+          this.error.set('Error when tasks search.')
           return of([])
         }),
         finalize(() => {
-          this.loading.next(false)
+          this.loading.set(false)
         })
       )
   }
@@ -60,20 +59,22 @@ export class TasksContainer implements OnInit {
 
   protected updateTask(form: TaskUpdateForm) {
     this.completeTask(form).pipe(first()).subscribe(task => {
-      this.refreshData(null)
+      setTimeout(() => {
+        this.refreshData(null)
+      })
     })
   }
 
   private completeTask(form: TaskUpdateForm) {
-    this.loading.next(true)
+    this.loading.set(true)
     return this.tasksService.completeTask(form.id, {completed: form.completed} as Task)
       .pipe(
         catchError((err) => {
-          this.error.next('Error when task update.')
+          this.error.set('Error when task update.')
           return of()
         }),
         finalize(() => {
-          this.loading.next(false)
+          this.loading.set(false)
         })
       )
   }

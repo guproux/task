@@ -7,8 +7,8 @@
   </button>
 </div>
 
-@if (error | async) {
-  <app-error-card class="task-error-card" [error]="error.getValue()" />
+@if (!!error()) {
+  <app-error-card class="task-error-card" [error]="error()" />
 }
 
 <form class="task-form" [formGroup]="taskForm" (ngSubmit)="submit()">
@@ -22,7 +22,7 @@
     <input type="text" id="description" formControlName="description" required>
   </div>
 
-  @if (creationMode | async) {
+  @if (creationMode()) {
     <button matButton="tonal" type="submit">Create</button>
   }
 </form>
