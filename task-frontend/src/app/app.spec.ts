@@ -1,23 +1,42 @@
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { App } from './app';
+import { RouterOutlet } from '@angular/router';
 
-describe('App', () => {
+describe('AppComponent', () => {
+
+  let fixture: ComponentFixture<App>;
+  let component: App;
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [App],
+      imports: [
+        App,
+        RouterOutlet
+      ]
     }).compileComponents();
+
+    fixture = TestBed.createComponent(App);
+    component = fixture.componentInstance;
   });
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(App);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+  it('should create the component', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('should render title', async () => {
-    const fixture = TestBed.createComponent(App);
-    await fixture.whenStable();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Task Application');
+  it('should display the title inside <h1>', () => {
+    fixture.detectChanges();
+
+    const h1 = fixture.nativeElement.querySelector('h1');
+
+    expect(h1).toBeTruthy();
+    expect(h1.textContent).toContain(component['title']());
+  });
+
+  it('should contain a <router-outlet>', () => {
+    fixture.detectChanges();
+
+    const outlet = fixture.nativeElement.querySelector('router-outlet');
+
+    expect(outlet).toBeTruthy();
   });
 });

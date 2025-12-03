@@ -38,7 +38,7 @@ export class TaskComponent implements OnInit {
   ngOnInit() {
     const id = this.route.snapshot.params['id']
     if (!!id) {
-      this.findTaskById(id).pipe(first()).subscribe(task => {
+      this.findTaskById(id).subscribe(task => {
         this.taskForm.patchValue({
           label: task.label,
           description: task.description,
@@ -67,7 +67,7 @@ export class TaskComponent implements OnInit {
   protected submit() {
     if (this.taskForm.valid) {
       const task = this.taskForm.getRawValue() as Task
-      this.createTask(task).pipe(first()).subscribe(task => {
+      this.createTask(task).subscribe(task => {
         this.back()
       })
     } else {

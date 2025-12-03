@@ -19,7 +19,7 @@
     <app-error-card class="task-container__error-card" [error]="error()" />
   } @else {
     <app-tasks-list
-      [tasks]="tasks"
+      [tasks]="tasks()"
       (onComplete)="updateTask($event)"
     />
   }

@@ -18,7 +18,7 @@ import {TaskUpdateForm} from '../../models/task-update-form';
 })
 export class TasksContainer implements OnInit {
 
-  protected tasks: Task[] = []
+  protected tasks = signal([] as Task[])
   protected loading = signal(false)
   protected error = signal('')
 
@@ -31,7 +31,7 @@ export class TasksContainer implements OnInit {
 
   private refreshData(completed: boolean | null) {
     this.getTasks(completed).pipe(first()).subscribe(tasks => {
-      this.tasks = tasks
+      this.tasks.set(tasks)
     })
   }
 
@@ -59,9 +59,7 @@ export class TasksContainer implements OnInit {
 
   protected updateTask(form: TaskUpdateForm) {
     this.completeTask(form).pipe(first()).subscribe(task => {
-      setTimeout(() => {
-        this.refreshData(null)
-      })
+      this.refreshData(null)
     })
   }
 
